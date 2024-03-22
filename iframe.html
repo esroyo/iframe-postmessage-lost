@@ -1,0 +1,20 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title>Iframe</title>
+  </head>
+  <body>
+    <h1>Hello, I'm an Iframe</h1>
+    <p>Scott Isaacs invented me.</p>
+    <script>
+document.addEventListener('visibilitychange', (evt) => {
+  if (evt.target.visibilityState === 'hidden') {
+    debugger;
+    console.log('[iframe] I have been hidden.');
+    console.log('[iframe] Message my last words...');
+    parent.postMessage({ msg: 'He has kill\'d me, mother: Run away, I pray you!' }, '*');
+  }
+});
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title>Parent</title>
+  </head>
+  <body>
+    <button id="openBtn">Open an iframe</button>
+    <button id="closeBtn">Close the iframe</button>
+    <hr />
+    <div id="container"></div>
+    <script>
+let iframe;
+openBtn.addEventListener('click', () => {
+  if (iframe) return;
+  iframe = document.createElement('iframe');
+  iframe.src = './iframe.html';
+  container.append(iframe);
+});
+
+closeBtn.addEventListener('click', () => {
+  if (!iframe) return;
+  container.removeChild(iframe);
+  iframe = undefined;
+});
+
+window.addEventListener('message', (evt) => {
+  console.log(`[parent] Iframe said: "${evt.data.msg}"`);
+  console.log('[parent] O treachery! Fly, good Fleance, fly, fly, fly! Thou mayst revenge-O slave!');
+});
+    </script>
+  </body>
+</html>
