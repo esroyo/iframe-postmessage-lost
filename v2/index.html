@@ -1,0 +1,54 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title>Parent</title>
+  </head>
+  <body>
+    <section>
+      <h2>Controls</h2>
+      <button id="openBtn">Open an iframe</button>
+      <button id="closeBtn">Close the iframe</button>
+    </section>
+    <hr />
+    <section>
+      <h2>Iframe arena</h2>
+      <div id="container"></div>
+    </section>
+    <hr />
+    <section>
+      <h2>Server feedback</h2>
+      <div id="feedback"></div>
+    </section>
+    <script>
+const uid = crypto.randomUUID();
+const eventSource = new EventSource(`https://beacon-sink.deno.dev/subscribe?uid=${uid}`);
+
+let iframe;
+
+openBtn.addEventListener('click', () => {
+  if (iframe) return;
+  iframe = document.createElement('iframe');
+  iframe.src = `iframe.html?uid=${uid}`;
+  container.append(iframe);
+});
+
+closeBtn.addEventListener('click', () => {
+  if (!iframe) return;
+  container.removeChild(iframe);
+  iframe = undefined;
+});
+
+window.addEventListener('message', (evt) => {
+  console.log(`[parent] Iframe said: "${evt.data.msg}"`);
+  console.log('[parent] O treachery! Fly, good Fleance, fly, fly, fly! Thou mayst revenge-O slave!');
+});
+
+eventSource.addEventListener('pingback', (evt) => {
+  const pre = document.createElement('pre');
+  pre.innerHTML = evt.data;
+  feedback.append(pre);
+  console.log(`[parent] ${evt.data}`);
+});
+    </script>
+  </body>
+</html>

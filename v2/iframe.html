@@ -1,0 +1,29 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title>Iframe</title>
+  </head>
+  <body>
+    <h1>Hello, I'm an Iframe</h1>
+    <p>Scott Isaacs invented me.</p>
+    <script>
+const url = new URL(window.location);
+const uid = url.searchParams.get('uid');
+const ping = () => navigator.sendBeacon(`https://beacon-sink.deno.dev/ping?uid=${uid}`);
+window.ping = ping;
+
+document.addEventListener('visibilitychange', (evt) => {
+  try {
+    if (evt.target.visibilityState === 'hidden') {
+      console.log('[iframe] I have been hidden.');
+      console.log('[iframe] Message my last words...');
+      parent.postMessage({ msg: 'He has kill\'d me, mother: Run away, I pray you!' }, '*');
+      console.log('[iframe] Beacon too:', ping());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+    </script>
+  </body>
+</html>
